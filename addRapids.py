@@ -1,10 +1,12 @@
 import re
 
 def addFeed(l):
+    if re.search("G(0)1 Z-", l):
+        return l + " F" + str(plungingFeed)
     if "G00" in l:
-        l = l + " F" + str(rapidsFeed)
+        return l + " F" + str(rapidsFeed)
     if "G01" in l:
-        l = l + " F" + str(cuttingFeed)
+        return l + " F" + str(cuttingFeed)
     return l
 
 def trimLineBreaks(l):
@@ -17,12 +19,13 @@ def checkFeed(l):
 
 
 ## TODO: pass paths as params
-f = open("top.gcode", "r")
-out  = open("top.out.gcode", "w")
+f = open("../top.gcode", "r")
+out  = open("../top.out.gcode", "w")
 
 ## TODO: pass feeds as params
 rapidsFeed = 300
-cuttingFeed = 30
+cuttingFeed = 40
+plungingFeed = 10
 zeroed = False
 # M211 S0 disable end stops
 ## TODO: disable end stops by param
@@ -32,7 +35,7 @@ for i,l in enumerate(f):
     # trim \r or \rn
     l = trimLineBreaks(l);
     # remove empty lines
-    if len(l) <= 1:
+    if len(l) == 0 :
         continue;
     # check for G92 units by minute feed
     # for my future self: flatcam sets
